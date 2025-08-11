@@ -3,52 +3,80 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Makamesco SPANK MD – Panel Deployment</title>
+  <title>Makamesco MD Master Bot – Panel Deployment</title>
   <style>
     body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:2rem;text-align:center;background:#f7f7f7}
     h1{margin-top:0}
     button{padding:.6rem 1rem;font-size:1rem;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:#111;color:#fff;margin:0.5rem}
     .card{background:#fff;margin:1.5rem auto;padding:1.5rem;max-width:480px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+    #deploySection, #forkNow { display: none; }
   </style>
 </head>
 <body>
 
-  <h1>🚀 Makamesco SPANK MD Deployment</h1>
-  <p>Panels below are ready – no GitHub required 🎉</p>
+  <h1>🚀 Makamesco MD Master Bot Deployment</h1>
+  <p id="status">Checking if repo is forked…</p>
 
-  <!-- FREE PANELS -->
-  <div class="card">
-    <h2>🌐 Free Panels</h2>
-    <p><em>Requires session ID in <code>sessions folder</code> – upload your <code>Acquiredcreds.json</code></em></p>
-    <button onclick="openSessionSite('https://spank-cred.onrender.com')">Get Session ID</button>
-    <br/><br/>
-    <button onclick="downloadZip('https://github.com/sesco001/Spank-md/archive/refs/heads/main.zip')">
-      Download&nbsp;Makamesco-md-v&nbsp;ZIP
-    </button>
-    <br/><br/>
-    <button onclick="openPanel('https://dashboard.katabump.com/auth/login#5e58ec')">
-      Open Katapumb Panel
-    </button>
+  <div class="card" id="verifySection">
+    <h2>✅ Fork Verification</h2>
+    <p>Enter your GitHub username to verify:</p>
+    <input type="text" id="username" placeholder="GitHub username"/>
+    <button onclick="verifyFork()">Verify Fork</button>
   </div>
 
-  <!-- PRIVATE PANELS -->
+  <div class="card" id="deploySection">
+    <h2>🚀 Deployment</h2>
+    <p>Fork verified! Choose your deployment method:</p>
+    <button onclick="openSite('https://heroku.com/deploy?template=https://github.com/sesco001/Makamesco_md')">Deploy to Heroku</button>
+    <button onclick="openSite('https://render.com')">Deploy to Render</button>
+  </div>
+
+  <div class="card" id="forkNow">
+    <h2>🔧 Fork Required</h2>
+    <p>This repo is not forked yet. Please fork to your account first:</p>
+    <button onclick="openSite('https://github.com/sesco001/Makamesco_md/fork')">Fork Now</button>
+  </div>
+
   <div class="card">
-    <h2>🔒 Private Panels</h2>
-    <p><em>Upload <code>Creds.json</code> in sessions folder – pair during console login</em></p>
-    <button onclick="downloadZip('https://github.com/sesco001/Spank-md/archive/refs/heads/main.zip')">
-      Download&nbsp;SPANK-MD&nbsp;ZIP
+    <h2>📦 Download Latest ZIP</h2>
+    <button onclick="downloadZip('https://github.com/sesco001/Makamesco_md/archive/refs/heads/main.zip')">
+      Download Makamesco MD ZIP
     </button>
   </div>
 
   <script>
-    function openSessionSite(url) {
+    function openSite(url) {
       window.open(url, "_blank");
     }
     function downloadZip(zipUrl) {
       window.open(zipUrl, "_blank");
     }
-    function openPanel(panelUrl) {
-      window.open(panelUrl, "_blank");
+
+    async function verifyFork() {
+      const username = document.getElementById('username').value.trim();
+      if (!username) {
+        alert("Please enter a GitHub username");
+        return;
+      }
+
+      document.getElementById('status').innerText = "Verifying fork…";
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${username}/Makamesco_md`);
+        if (!res.ok) throw new Error("Repo not found");
+        const data = await res.json();
+
+        if (data.fork && data.parent && data.parent.html_url === "https://github.com/sesco001/Makamesco_md") {
+          document.getElementById('status').innerText = "✅ Fork verified!";
+          document.getElementById('deploySection').style.display = "block";
+        } else {
+          document.getElementById('status').innerText = "❌ Not a fork of Makamesco_md.";
+          document.getElementById('forkNow').style.display = "block";
+        }
+      } catch (err) {
+        document.getElementById('status').innerText = "❌ Fork verification failed.";
+        document.getElementById('forkNow').style.display = "block";
+      }
     }
   </script>
 
