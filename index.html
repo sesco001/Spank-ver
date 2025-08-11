@@ -39,24 +39,20 @@
 
   <div class="card">
     <h2>📦 Download Latest ZIP</h2>
-    <button onclick="downloadZip('https://github.com/sesco001/Makamesco_md/archive/refs/heads/main.zip')">
-      Download Makamesco MD ZIP
-    </button>
+    <p>(Fork verification required before downloading)</p>
+    <button onclick="verifyBeforeDownload()">Download Makamesco MD ZIP</button>
   </div>
 
   <script>
     function openSite(url) {
       window.open(url, "_blank");
     }
-    function downloadZip(zipUrl) {
-      window.open(zipUrl, "_blank");
-    }
 
     async function verifyFork() {
       const username = document.getElementById('username').value.trim();
       if (!username) {
         alert("Please enter a GitHub username");
-        return;
+        return false;
       }
 
       document.getElementById('status').innerText = "Verifying fork…";
@@ -69,13 +65,23 @@
         if (data.fork && data.parent && data.parent.html_url === "https://github.com/sesco001/Makamesco_md") {
           document.getElementById('status').innerText = "✅ Fork verified!";
           document.getElementById('deploySection').style.display = "block";
+          return true;
         } else {
           document.getElementById('status').innerText = "❌ Not a fork of Makamesco_md.";
           document.getElementById('forkNow').style.display = "block";
+          return false;
         }
       } catch (err) {
         document.getElementById('status').innerText = "❌ Fork verification failed.";
         document.getElementById('forkNow').style.display = "block";
+        return false;
+      }
+    }
+
+    async function verifyBeforeDownload() {
+      const isForked = await verifyFork();
+      if (isForked) {
+        window.open('https://github.com/sesco001/Makamesco_md/archive/refs/heads/main.zip', "_blank");
       }
     }
   </script>
