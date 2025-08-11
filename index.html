@@ -1,100 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Makamesco MD Master Bot – Verify Fork</title>
-<style>
-  body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:2rem;text-align:center;background:#f7f7f7}
-  h1{margin-top:0}
-  button{padding:.6rem 1rem;font-size:1rem;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:#111;color:#fff;margin:0.5rem}
-  input{padding:0.5rem;font-size:1rem;width:70%;margin-bottom:1rem}
-  .card{background:#fff;margin:1.5rem auto;padding:1.5rem;max-width:480px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
-  #forkNow { display: none; }
-</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🔥 Makamesco MD Master Bot – Deployment</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      text-align: center;
+      background: linear-gradient(135deg, #ff4b2b, #ff416c, #d400d4);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
+      color: #fff;
+    }
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    h1 {
+      font-size: 2rem;
+      text-shadow: 0 0 8px rgba(255,255,255,0.8);
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 1.5rem auto;
+      max-width: 500px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+    }
+    button {
+      padding: 0.8rem 1.4rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      margin: 0.5rem;
+      color: #fff;
+      background: linear-gradient(45deg, #ff1493, #ff4b2b, #ff8c00);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(255,255,255,0.6);
+    }
+    #verify-section {
+      background: rgba(0,0,0,0.4);
+      padding: 1.5rem;
+      border-radius: 15px;
+      max-width: 500px;
+      margin: 1.5rem auto;
+    }
+  </style>
 </head>
 <body>
 
-<div id="step1">
-  <h1>🚀 Makamesco MD Master Bot – Fork Verification</h1>
-  <p id="status">Enter your GitHub username to verify fork before deployment</p>
+  <h1>🔥 Makamesco MD Master Bot Deployment</h1>
+  <p>Only proceed if you have forked <strong>Makamesco_md</strong> repository</p>
 
-  <div class="card">
-    <input type="text" id="username" placeholder="GitHub username"/>
-    <br/>
-    <button onclick="verifyFork()">Verify & Continue</button>
+  <!-- Verification Section -->
+  <div id="verify-section">
+    <p>Enter your GitHub username to verify fork:</p>
+    <input type="text" id="username" placeholder="GitHub Username" style="padding:0.5rem;border-radius:6px;border:none;width:70%;">
+    <br><br>
+    <button onclick="verifyFork()">✅ Verify & Proceed</button>
   </div>
 
-  <div class="card" id="forkNow">
-    <h2>🔧 Fork Required</h2>
-    <p>This repo is not forked yet. Please fork to your account first:</p>
-    <button onclick="openSite('https://github.com/sesco001/Makamesco_md/fork')">Fork Now</button>
-  </div>
-</div>
-
-<div id="step2" style="display:none;">
-  <h1>🚀 Makamesco MD Master Bot – Deployment Page</h1>
-  <p>Fork verified successfully! Choose your deployment method below:</p>
-
-  <div class="card">
-    <h2>📤 Deployment</h2>
-    <button id="herokuBtn">Deploy to Heroku</button>
-    <button onclick="openSite('https://render.com')">Deploy to Render</button>
+  <!-- Deployment Section (hidden initially) -->
+  <div id="deployment-section" style="display:none;">
+    <div class="card">
+      <h2>🚀 Deploy</h2>
+      <button onclick="window.open('https://heroku.com/deploy?template=https://github.com/sesco001/Makamesco_md','_blank')">Deploy to Heroku</button>
+      <button onclick="window.open('https://render.com','_blank')">Deploy to Render</button>
+    </div>
+    <div class="card">
+      <h2>📦 Panel & Download</h2>
+      <button onclick="window.open('https://github.com/sesco001/Makamesco_md/archive/refs/heads/main.zip','_blank')">Download Latest ZIP</button>
+      <button onclick="window.open('https://dashboard.katabump.com/auth/login#5e58ec','_blank')">Open Katapumb Panel</button>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>📦 Download Latest ZIP</h2>
-    <button onclick="openSite('https://github.com/sesco001/Makamesco_md/archive/refs/heads/main.zip')">
-      Download Makamesco MD ZIP
-    </button>
-  </div>
+  <script>
+    async function verifyFork() {
+      const username = document.getElementById('username').value.trim();
+      if (!username) return alert("Please enter your GitHub username!");
 
-  <div class="card">
-    <h2>🌐 Suggested Panel</h2>
-    <button onclick="openSite('https://dashboard.katabump.com/auth/login#5e58ec')">Open Katapumb Panel</button>
-  </div>
-</div>
-
-<script>
-  function openSite(url) {
-    window.open(url, "_blank");
-  }
-
-  async function verifyFork() {
-    const username = document.getElementById('username').value.trim();
-    if (!username) {
-      alert("Please enter a GitHub username");
-      return;
-    }
-
-    document.getElementById('status').innerText = "Verifying fork…";
-
-    try {
-      const res = await fetch(`https://api.github.com/repos/${username}/Makamesco_md`);
-      if (!res.ok) throw new Error("Repo not found");
-      const data = await res.json();
-
-      if (data.fork && data.parent && data.parent.html_url === "https://github.com/sesco001/Makamesco_md") {
-        document.getElementById('status').innerText = "✅ Fork verified!";
-        
-        // Hide step 1 and show step 2
-        document.getElementById('step1').style.display = "none";
-        document.getElementById('step2').style.display = "block";
-        
-        // Set Heroku button to use user's fork
-        document.getElementById('herokuBtn').onclick = function() {
-          openSite(`https://heroku.com/deploy?template=https://github.com/${username}/Makamesco_md`);
-        };
-      } else {
-        document.getElementById('status').innerText = "❌ Not a fork of Makamesco_md.";
-        document.getElementById('forkNow').style.display = "block";
+      const apiUrl = `https://api.github.com/repos/${username}/Makamesco_md`;
+      try {
+        const res = await fetch(apiUrl);
+        if (res.status === 200) {
+          alert("✅ Fork verified! Proceeding to deployment...");
+          document.getElementById('verify-section').style.display = 'none';
+          document.getElementById('deployment-section').style.display = 'block';
+        } else {
+          alert("❌ Fork not found! Please fork https://github.com/sesco001/Makamesco_md first.");
+        }
+      } catch (err) {
+        alert("⚠️ Error verifying repository.");
       }
-    } catch (err) {
-      document.getElementById('status').innerText = "❌ Fork verification failed.";
-      document.getElementById('forkNow').style.display = "block";
     }
-  }
-</script>
+  </script>
 
 </body>
 </html>
